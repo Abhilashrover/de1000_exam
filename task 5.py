@@ -1,16 +1,14 @@
-
 from openpyxl import load_workbook
 
-wb = load_workbook('sagatave_eksamenam.xlsx',data_only=True)
+wb = load_workbook('sagatave_eksamenam.xlsx', data_only=True)
 ws = wb['Lapa_0']
-max_row = ws.max_row
 
 total_sum = 0
 
-for row in range(2, max_row + 1):
-    client = ws['F' + str(row)].value
-    quantity = ws['L' + str(row)].value
-    total = ws['N' + str(row)].value
+for row in ws.iter_rows(min_row=2, values_only=True):
+    client = row[5]    # Column F
+    quantity = row[11] # Column L
+    total = row[13]    # Column N
 
     if client != 'Korporatīvais' or quantity is None or total is None:
         continue
@@ -20,5 +18,7 @@ for row in range(2, max_row + 1):
         if 40 <= quantity <= 50:
             total_sum += float(total)
     except ValueError:
-        continue 
+        continue
+
 print(int(total_sum))
+
